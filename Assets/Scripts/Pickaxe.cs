@@ -1,34 +1,62 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using TMPro;
 
 public class Pickaxe : MonoBehaviour
 {
-    private float angle = 20f;
-    private bool swing = false;
-    private void Update()
+    [SerializeField] Transform player;
+    [SerializeField] TextMeshProUGUI oreText;
+    [SerializeField] ParticleSystem effect;
+    [SerializeField] float rockRange = 3.0f;
+    [SerializeField] float rotation = 20f; // èâä˙rotation
+    public static bool swing = false; // ÉcÉãÉnÉVÇêUÇËâ∫ÇÎÇ∑
+    public static bool back = false; // ñﬂÇ∑
+    int oreCount = 0;
+
+    public void Update()
     {
-        if(Mouse.current.leftButton.wasPressedThisFrame)
+        if (Mouse.current.leftButton.wasPressedThisFrame && swing == false)
         {
             swing = true;
+            back = false;
         }
-        if(swing)
+        if(swing==true)
         {
-            if(angle<90)
+            if(back==false)
             {
-                angle = Mathf.Lerp(angle, 90, Time.deltaTime * 15);
+                rotation = Mathf.MoveTowards(rotation, 90f, Time.deltaTime * 600f);
+                if(rotation >=90)
+                {
+                    back = true;
+
+                    Collider[] rocks = Physics.OverlapSphere(player.position, rockRange);
+
+                    foreach(Collider rock in rocks)
+                    {
+                        if (rock.CompareTag("Rock"))
+                        {
+                            oreCount++;
+                            oreText.text = "" + oreCount;
+                            if(effect != null)
+                            {
+                                Instantiate(effect,rock.transform.position, Quaternion.identity);
+                            }
+                            break;
+                        }
+                    }
+                }
             }
             else
             {
-                angle = Mathf.Lerp(angle, 20, Time.deltaTime * 15);
+                rotation = Mathf.MoveTowards(rotation, 20f, Time.deltaTime * 600f);
+                if(rotation<=20f)
+                {
+                    rotation = 20f;
+                    swing = false;
+                    back = false;
+                }
             }
-            transform.localRotation = Quaternion.Euler(0, 0, angle);
-
-            if(angle <21 && angle>19)
-            {
-                angle = 20;
-                swing = false;
-            }
+           transform.localRotation = Quaternion.Euler(0, 90f, rotation);
         }
     }
 }
