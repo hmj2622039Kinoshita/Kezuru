@@ -6,12 +6,11 @@ public class Pickaxe : MonoBehaviour
 {
     [SerializeField] Transform player;
     [SerializeField] TextMeshProUGUI oreText;
-    [SerializeField] ParticleSystem effect;
     [SerializeField] float rockRange = 3.0f;
     [SerializeField] float rotation = 20f; // ‰Šúrotation
     public static bool swing = false; // ƒcƒ‹ƒnƒV‚ğU‚è‰º‚ë‚·
     public static bool back = false; // –ß‚·
-    int oreCount = 0;
+    public static int oreCount = 0;
 
     public void Update()
     {
@@ -37,10 +36,6 @@ public class Pickaxe : MonoBehaviour
                         {
                             oreCount++;
                             oreText.text = "" + oreCount;
-                            if(effect != null)
-                            {
-                                Instantiate(effect,rock.transform.position, Quaternion.identity);
-                            }
                             break;
                         }
                     }

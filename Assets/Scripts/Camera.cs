@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class Camera : MonoBehaviour
 {
-    //[SerializeField] Transform player; // player‚Ìtransform“ü‚ê
     [SerializeField] float sensitivity = 2.0f;
     [SerializeField] float rotationX = 0f;
 
